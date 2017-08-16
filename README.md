@@ -162,9 +162,9 @@ Docker Hub提供不限数目的公开镜像托管服务，但仅提供一个私�
 -P 接下来就可以使用localhost：32768进行访问容器内应用了！
 -p 参数：可以指定宿主主机上的端口映射到容器内指定的开放端口。有如下三种格式：
 ip:hostPort:containerPort | ip::containerPort | hostPort:containerPort
-1 ip:hostPort:containerPort：指定主机的指定端口-->容器内指定端口
-2 ip::containerPort：宿主主机的随机端口-->容器内指定端口
-3 hostPorrt:containerPort：宿主主机的指定端口-->容器内指定端口 -p
+  1 ip:hostPort:containerPort：指定主机的指定端口-->容器内指定端口
+  2 ip::containerPort：宿主主机的随机端口-->容器内指定端口
+  3 hostPorrt:containerPort：宿主主机的指定端口-->容器内指定端口 -p
 2 查看网络配置
 命令：docker inspect --format '{{.NetworkSettings}}' ID，即使用docker inspect查看容器信息！
 4.2、数据卷 volume
@@ -229,20 +229,28 @@ Docker给目标容器提供了两种方式来暴露连接提供的服务：
 
 环境变量
 /etc/hosts文件
-1， 环境变量
-当两个容器通过连接互联会后，Docker会在目标容器中设置相关的环境变量，以便在目标容器中使用源容器提供的服务。连接环境变量的命名格式为alias_NAME，其中alias为--link参数中的别名。一般情况下，可以使用env命令来查看一个容器的环境变量：
--env 2， /etc/hosts文件
-查看目标容器的/etc/hosts配置文件，具体操作如下：
+  1， 环境变量
+  当两个容器通过连接互联会后，Docker会在目标容器中设置相关的环境变量，以便在目标容器中使用源容器提供的服务。连接环境变量的命名格式为alias_NAME，其中alias为--link参数中的别名。一般情况下，可以使用env命令来查看一个容器的环境变量：
+-env 
+  2， /etc/hosts文件
+  查看目标容器的/etc/hosts配置文件，具体操作如下：
 -env 可以看到，容器连接webdb对应的地址为172.17.0.2，该地址实为dbdata容器的地址！容器对webdb连接的操作将会映射到该地址上！！！
+
 3 代理连接
 上面说的容器连接都是在一个宿主主机上的连接。对于跨主机的容器连接，可以利用ambassador模式实现跨主机连接，这种模式的连接称为代理连接！
 通过代理连接，可以解耦两个原本直接相连的容器的耦合性。
 
-原始模式： image 1，不能跨主机连接；
-2，耦合性太高，当需要连接到新的redis-server时，redis-client必须重启才行！
-ambassador代理模式： image 客户机上的client容器连接到本机的ambassador1代理容器，ambassador1代理容器通过网络连接到服务器主机上的ambassador2代理容器，ambassador2代理容器连接到server容器，最终实现client使用server的服务。client根本不需要关心连接到的是哪一个server！
+原始模式： 
+  1，不能跨主机连接；
+  2，耦合性太高，当需要连接到新的redis-server时，redis-client必须重启才行！
+ambassador代理模式： 
+  客户机上的client容器连接到本机的ambassador1代理容器，ambassador1代理容器通过网络连接到服务器主机上的ambassador2代理容器，ambassador2代理容器连接到server容器，最终实现client使用server的服务。client根本不需要关心连接到的是哪一个server！
+  
 步骤：
-1，在服务器主机上启动一个redis-server服务的容器： image 2，在服务器主机上建立一个代理容器ambassador2，将它连接到redis-server： image 3，客户机上建立一个ambassador1代理容器，将它连接到服务器主机的代理容器ambassador2： image 4，客户机上只需连接到本机的ambassador1dialing容器即可： image
+  1，在服务器主机上启动一个redis-server服务的容器： 
+  2，在服务器主机上建立一个代理容器ambassador2，将它连接到redis-server： 
+  3，客户机上建立一个ambassador1代理容器，将它连接到服务器主机的代理容器ambassador2： 
+  4，客户机上只需连接到本机的ambassador1dialing容器即可：
 
 五、创建SSH服务镜像
 之前的命令比如attach、exec等在容器内部管理容器的命令，无法解决远程管理容器的需求。需要使用SSH服务连接到远端系统进行管理系统。Docker很多镜像都没有安装SSH服务，我们需要自己为其安装SSH服务！
