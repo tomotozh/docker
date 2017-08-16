@@ -9,6 +9,7 @@ Docker学习笔记
 Docker是一款容器，通过Docker能够快速搭建好开发和运行环境。 
 
 二、容器
+
 容器的概念：
 容器就是打包了应用和服务的环境。每个容器都由一组特定的应用和必要的依赖库组成。
 
@@ -17,8 +18,8 @@ Docker是一款容器，通过Docker能够快速搭建好开发和运行环境�
 容器的常见命令包括：查看、创建、启动、终止和删除。
 
 1 创建容器
-创建容器有两种命令：docker create和docker run，区别在于：docker create创建的容器处于停止状态，docker run不仅创建了容器，还启动了容器。
-创建容器后，Docker会立刻返回容器的ID，ID是可以唯一标识一个容器，每个容器的ID都是独一无二的。
+  创建容器有两种命令：docker create和docker run，区别在于：docker create创建的容器处于停止状态，docker run不仅创建了容器，还启动了容器。
+  创建容器后，Docker会立刻返回容器的ID，ID是可以唯一标识一个容器，每个容器的ID都是独一无二的。
   1 命令 docker ps：查看正在运行的容器
   docker ps -a：查看所有容器，包括未启动的容器。
   参数-n=x：表示列出最后创建的x个容器 docker ps 参数含义 CONTAINER ID：唯一标识容器的ID IMAGE：创建容器时使用的镜像 COMMAND：容器最后运行的命  令 CREATE：创建容器的时间 STATUS：容器的状态，Up 2 minutes标识运行2分钟，未运行的状态是Exited(0)表示已退出 PORTS：对外开放的端口 NAMES：容器 名
@@ -86,6 +87,7 @@ docker import url res:tag，res和tag分别是生成的镜像和标记。
 想要使用镜像构建容器可以使用命令：docker run -i -t --name=xxx res:tag/ID yyy创建交互型容器或者docker run -d --name=xxx res:tag/ID创建后台型容器。
 
 三、镜像
+
 镜像的概念：
 镜像是容器的运行基础，容器时镜像运行后的形态。
 
@@ -145,7 +147,9 @@ Docker Hub提供不限数目的公开镜像托管服务，但仅提供一个私�
 
 1 docker login，首先需要登录
 2 docker push imageName，上传镜像到Docker Hub。
+
 四、数据卷及容器连接
+
 应用在容器汇总运行，总会用到或者产生一些数据。
 
 容器网络基础：容器通过对外暴露端口向外提供服务；
@@ -252,7 +256,9 @@ ambassador代理模式：
   3，客户机上建立一个ambassador1代理容器，将它连接到服务器主机的代理容器ambassador2： 
   4，客户机上只需连接到本机的ambassador1dialing容器即可：
 
+
 五、创建SSH服务镜像
+
 之前的命令比如attach、exec等在容器内部管理容器的命令，无法解决远程管理容器的需求。需要使用SSH服务连接到远端系统进行管理系统。Docker很多镜像都没有安装SSH服务，我们需要自己为其安装SSH服务！
 
 5.1、基于commit命令的方式
